@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import fs from "fs/promises";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import chalk from "chalk";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +14,7 @@ export async function listContacts() {
     const data = await fs.readFile(contactsPath, "utf-8");
     return JSON.parse(data);
   } catch (error) {
-    console.log("error =>", error);
+    console.log(chalk.red("error =>"), error);
   }
 }
 
@@ -22,7 +23,7 @@ export async function getContactById(contactId) {
     const contasts = await listContacts();
     return contasts.find(({ id }) => id === contactId) || null;
   } catch (error) {
-    console.log("error =>", error);
+    console.log(chalk.red("error =>"), error);
   }
 }
 
@@ -37,11 +38,17 @@ export async function removeContact(contactId) {
     await fs.writeFile(contactsPath, JSON.stringify(newContasts, null, 2));
     return removedContact;
   } catch (error) {
-    console.log("error =>", error);
+    console.log(chalk.red("error =>"), error);
   }
 }
 
 export async function addContact(name, email, phone) {
+  if (!name || !email || !phone) {
+    return console.log(
+      chalk.red("error =>"),
+      "fields name, email, phone are reqared"
+    );
+  }
   try {
     const contasts = await listContacts();
     const newContact = { id: nanoid(), name, email, phone };
@@ -49,6 +56,6 @@ export async function addContact(name, email, phone) {
     await fs.writeFile(contactsPath, JSON.stringify(contasts, null, 2));
     return newContact;
   } catch (error) {
-    console.log("error =>", error);
+    console.log(chalk.red("error =>"), error);
   }
 }

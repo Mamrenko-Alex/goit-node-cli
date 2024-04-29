@@ -1,10 +1,12 @@
 import { program } from "commander";
+import chalk from "chalk";
 import {
   listContacts,
   getContactById,
   removeContact,
   addContact,
 } from "./contacts.js";
+
 program
   .option("-a, --action <type>", "choose action")
   .option("-i, --id <type>", "user id")
@@ -21,36 +23,40 @@ async function invokeAction({ action, id, name, email, phone }) {
     case "list":
       try {
         const getListContacts = await listContacts();
-        console.log(getListContacts);
+        console.log(chalk.green("Contacts List:"));
+        console.table(getListContacts);
       } catch (error) {
-        console.log("error =>", error);
+        console.log(chalk.red("error =>"), error);
       }
       break;
 
     case "get":
       try {
         const getContact = await getContactById(id);
-        console.log(getContact);
+        console.log(chalk.cyan("Contact Details:"));
+        console.table(getContact);
       } catch (error) {
-        console.log("error =>", error);
+        console.log(chalk.red("error =>"), error);
       }
       break;
 
     case "add":
       try {
         const addedContact = await addContact(name, email, phone);
-        console.log(addedContact);
+        console.log(chalk.green("Added Contact:"));
+        console.table(addedContact);
       } catch (error) {
-        console.log("error =>", error);
+        console.log(chalk.red("error =>"), error);
       }
       break;
 
     case "remove":
       try {
         const deletedContact = await removeContact(id);
-        console.log(deletedContact);
+        console.log(chalk.yellow("Deleted Contact:"));
+        console.table(deletedContact);
       } catch (error) {
-        console.log("error =>", error);
+        console.log(chalk.red("error =>"), error);
       }
       break;
 
