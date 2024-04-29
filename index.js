@@ -6,6 +6,7 @@ import {
   removeContact,
   addContact,
 } from "./contacts.js";
+import readline from "readline";
 
 program
   .option("-a, --action <type>", "choose action")
@@ -53,7 +54,7 @@ async function invokeAction({ action, id, name, email, phone }) {
     case "remove":
       try {
         const deletedContact = await removeContact(id);
-        console.log(chalk.yellow("Deleted Contact:"));
+        deletedContact && console.log(chalk.yellow("Deleted Contact:"));
         console.table(deletedContact);
       } catch (error) {
         console.log(chalk.red("error =>"), error);

@@ -31,11 +31,12 @@ export async function removeContact(contactId) {
   try {
     const contasts = await listContacts();
     const removedContact = await getContactById(contactId);
-    if (!removeContact) {
+    if (!removedContact) {
       return null;
     }
     const newContasts = contasts.filter(({ id }) => id !== contactId);
     await fs.writeFile(contactsPath, JSON.stringify(newContasts, null, 2));
+    console.log(chalk.green("Contact removed successfully!"));
     return removedContact;
   } catch (error) {
     console.log(chalk.red("error =>"), error);
